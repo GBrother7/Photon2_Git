@@ -26,6 +26,7 @@ public class Loginpage : MonoBehaviour
 
     private void OpenHome()
     {
+        //Open Home Panel
         uiManager.ShowPanel(2);
     }
 

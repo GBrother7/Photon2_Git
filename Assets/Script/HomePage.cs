@@ -8,7 +8,6 @@ public class HomePage : MonoBehaviour
     [SerializeField] private Button playRandom;
     [SerializeField] private Button playFriends;
 
-
     // Start is called before the first frame update
     void Start()
     {
