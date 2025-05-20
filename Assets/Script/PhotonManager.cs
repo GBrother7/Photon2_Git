@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
+     public InputField CreateRoomInput;
+     public InputField JoinRoomInput;
+
     public static PhotonManager Instance;
 
     public static Action OnConnectToServer;
+    public static Action CreateCustomRoom;
 
 
     public string currentRoomName;
@@ -59,16 +64,17 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("<color=green> Joined lobby successfully.... </color>");      
     }
 
-    private void CreateRoom()
+    public void CreateRoom()
     {
         Debug.Log("Trying to create room");
-        PhotonNetwork.CreateRoom("Saptarshi");
+        PhotonNetwork.CreateRoom(CreateRoomInput.text);
     }
 
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
         Debug.Log("<color=green> Created room  successfully.... </color>");
+       // PhotonNetwork.LoadLevel(1);
     }
 
 
@@ -78,16 +84,21 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("Trying to join random room");
     }
 
+    public void JoinRoom()
+    {
+        Debug.Log("Trying to join my Custom Room.....");
+        PhotonNetwork.JoinRoom(JoinRoomInput.text);
+       
+    }
 
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        Debug.Log("Joined Room");
+        Debug.Log("< color = green > Join room  successfully.... </ color >");
         currentRoomName = PhotonNetwork.CurrentRoom.Name;
         PhotonNetwork.LoadLevel(1);
-
     }
 
-
+    
 }
 
