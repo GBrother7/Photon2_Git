@@ -73,7 +73,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
             IsOpen = true,
             IsVisible = true
         };
-        PhotonNetwork.CreateRoom(CreateRoomInput.text, roomOptions, TypedLobby.Default);
+
+        PhotonNetwork.CreateRoom(CreateRoomInput.text, roomOptions, TypedLobby.Default);   
     }
 
     public override void OnCreatedRoom()
