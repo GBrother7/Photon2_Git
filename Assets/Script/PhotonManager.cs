@@ -8,8 +8,8 @@ using System;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
 {
-     public InputField CreateRoomInput;
-     public InputField JoinRoomInput;
+    public InputField CreateRoomInput;
+    public InputField JoinRoomInput;
 
     public static PhotonManager Instance;
 
@@ -32,7 +32,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-     
+    
     }
 
 
@@ -67,14 +67,19 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         Debug.Log("Trying to create room");
-        PhotonNetwork.CreateRoom(CreateRoomInput.text);
+        RoomOptions roomOptions = new RoomOptions()
+        {
+            MaxPlayers = 4,
+            IsOpen = true,
+            IsVisible = true
+        };
+        PhotonNetwork.CreateRoom(CreateRoomInput.text, roomOptions, TypedLobby.Default);
     }
 
     public override void OnCreatedRoom()
     {
         base.OnCreatedRoom();
         Debug.Log("<color=green> Created room  successfully.... </color>");
-       // PhotonNetwork.LoadLevel(1);
     }
 
 
@@ -96,9 +101,14 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         Debug.Log("< color = green > Join room  successfully.... </ color >");
         currentRoomName = PhotonNetwork.CurrentRoom.Name;
+        Debug.Log("Number of Players : "+PhotonNetwork.CountOfPlayersInRooms);
         PhotonNetwork.LoadLevel(1);
     }
 
-    
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        base.OnJoinRoomFailed(returnCode, message);
+        Debug.Log("<color=red> Join room  Failed.... </color>");
+    }
 }
 
