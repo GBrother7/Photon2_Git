@@ -20,6 +20,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public string currentRoomName;
 
 
+    public Slider maxPlayerSlider;
+    public InputField maxPlayerText; // (or TMP_Text if you're using TextMeshPro)
+
+    private const int MinNumber = 2;
+
+  
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,12 +36,21 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
         DontDestroyOnLoad(this);
     }
-
-    void Start()
+    private void Update()
     {
-    
+        OnSliderValueChanged(maxPlayerSlider.value);
     }
 
+    private void Start()
+    {
+        maxPlayerSlider.minValue = MinNumber;
+        maxPlayerSlider.maxValue = 10;
+    }
+    public void OnSliderValueChanged(float value)
+    {
+        int playerCount = Mathf.RoundToInt(value);
+        maxPlayerText.text = playerCount.ToString();
+    }
 
     public void ConnectToServer()
     {
@@ -67,15 +83,19 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public void CreateRoom()
     {
         Debug.Log("Trying to create room");
+
+        int maxPlayers = Mathf.RoundToInt(maxPlayerSlider.value);
+
         RoomOptions roomOptions = new RoomOptions()
         {
-            MaxPlayers = 4,
+            MaxPlayers = (byte)maxPlayers,
             IsOpen = true,
             IsVisible = true
         };
-
+        Debug.Log("Join max Players : " + maxPlayers);
         PhotonNetwork.CreateRoom(CreateRoomInput.text, roomOptions, TypedLobby.Default);   
     }
+
 
     public override void OnCreatedRoom()
     {
@@ -94,7 +114,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Trying to join my Custom Room.....");
         PhotonNetwork.JoinRoom(JoinRoomInput.text);
-       
+    }
+
+    public void JoinRoomList(string RoomName)
+    {
+        PhotonNetwork.JoinRoom(RoomName);
     }
 
     public override void OnJoinedRoom()
@@ -111,5 +135,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         base.OnJoinRoomFailed(returnCode, message);
         Debug.Log("<color=red> Join room  Failed.... </color>");
     }
+
+    
 }
 
